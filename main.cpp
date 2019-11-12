@@ -4,37 +4,19 @@
 using namespace std;
 
 int main() {
+    int r, y, g;
+    cin >> r >> y >> g;
     int n;
     cin >> n;
-    int max, min;
-    double mid;
-    int num;
-    if (n % 2 == 1) {
-        int mid_ix = n / 2;
-        for (unsigned i = 0; i != n; ++i) {
-            cin >> num;
-            if (i == 0) { max = num; }
-            if (i == n - 1) { min = num; }
-            if (i == mid_ix) { mid = num; }
-        }    
+    int type, time;
+    int total_time = 0;
+    for (unsigned i = 0; i != n; ++i) {
+        cin >> type >> time;
+        if (type == 0) { total_time += time; }
+        if (type == 1) { total_time += time; }
+        if (type == 2) { total_time += time + r; } 
+        if (type == 3) { ; } 
     }
-    else if (n % 2 == 0) {
-        int mid_ix1 = n / 2, mid_ix2 = mid_ix1 - 1;
-        int mid1, mid2;
-        for (unsigned i = 0; i != n; ++i) {
-            cin >> num;
-            if (i == 0) { max = num; }
-            if (i == n - 1) { min = num; }
-            if (i == mid_ix1) { mid1 = num; }
-            if (i == mid_ix2) { mid2 = num; }            
-        } 
-        mid = double(mid1 + mid2) / 2;
-    }
-    if (min > max) {
-        int tmp = max;
-        max = min;
-        min = tmp;
-    }
-    cout << max << " " << mid << " " << min << endl;
+    cout << total_time;    
     return 0;
 }
