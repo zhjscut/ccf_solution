@@ -4,17 +4,25 @@
 using namespace std;
 
 int main() {
-    int prices[1000], new_prices[1000];
-    int n;
-    cin >> n;    
-    for (unsigned i = 0; i != n; ++i)
-        cin >> prices[i];
-    new_prices[0] = int(double(prices[0] + prices[1]) / 2);
-    for (unsigned i = 1; i != n-1; ++i)
-        new_prices[i] = int(double(prices[i-1] + prices[i] + prices[i+1]) / 3);
-    new_prices[n-1] = int(double(prices[n-2] + prices[n-1]) / 2);
-    
-    for (unsigned i = 0; i != n; ++i)
-        cout << new_prices[i] << " ";
+    int score = 1, total_score = 0;
+    int status;
+    while (cin >> status) {
+        if (status == 0) {
+            cout << total_score;
+            break;
+        }
+        else if (status == 1) {
+            score = 1;
+            total_score += score;
+        }
+        else if (status == 2) {
+            if (score == 1 || total_score == 0)
+                score = 2;
+            else
+                score += 2;
+            total_score += score;
+        }
+    }
+        
     return 0;
 }
