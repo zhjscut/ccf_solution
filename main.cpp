@@ -4,41 +4,37 @@
 using namespace std;
 
 int main() {
-    int trees, epochs;
-    cin >> trees >> epochs;
-    cin.get(); // remove the '\n' of the first line
-    istringstream iss;
-    vector<int> apple_each_tree;
-    vector<int> decrease_each_tree; // number of apples during the decreasing process
-    int dec_i; // number of apples decreased in the ith epoch
-    int begin_each_tree; // number of apples before the decreasing process
-    string line;
-    while (getline(cin, line)) {
-        iss.clear(); iss.str(line);
-        iss >> begin_each_tree;
-        apple_each_tree.push_back(begin_each_tree);
-        int remain = 0;
-        while (iss >> dec_i) {
-            remain += dec_i;
-        }
-        decrease_each_tree.push_back(-remain); // revert negative number to a positive one
+    int n;
+    cin >> n;
+    int max, min;
+    double mid;
+    int num;
+    if (n % 2 == 1) {
+        int mid_ix = n / 2;
+        for (unsigned i = 0; i != n; ++i) {
+            cin >> num;
+            if (i == 0) { max = num; }
+            if (i == n - 1) { min = num; }
+            if (i == mid_ix) { mid = num; }
+        }    
     }
-    int max = decrease_each_tree[0], max_id = 1;
-    for (int ix = 1; ix != epochs; ++ix) {
-        if (decrease_each_tree[ix] > max) {
-            max = decrease_each_tree[ix];
-            max_id = ix + 1;
-        }
+    else if (n % 2 == 0) {
+        int mid_ix1 = n / 2, mid_ix2 = mid_ix1 - 1;
+        int mid1, mid2;
+        for (unsigned i = 0; i != n; ++i) {
+            cin >> num;
+            if (i == 0) { max = num; }
+            if (i == n - 1) { min = num; }
+            if (i == mid_ix1) { mid1 = num; }
+            if (i == mid_ix2) { mid2 = num; }            
+        } 
+        mid = double(mid1 + mid2) / 2;
     }
-    int sum = 0;
-    for (auto num: apple_each_tree) {
-        sum += num;
+    if (min > max) {
+        int tmp = max;
+        max = min;
+        min = tmp;
     }
-    for (auto num: decrease_each_tree) {
-        sum -= num;
-    }
-    cout << sum << " " << max_id << " " << max << endl;  
-    
+    cout << max << " " << mid << " " << min << endl;
     return 0;
 }
-
