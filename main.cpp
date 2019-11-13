@@ -1,27 +1,35 @@
 #include <iostream>
 #include <cmath>
-using namespace std;
+#include <iomanip>
+#include <vector>
 
-int cnt_numbers[10000] = {};
+#include <stdio.h>
+
+using namespace std;
 
 int main() {
     int n;
     cin >> n;
+    vector<int> numbers;
     int num;
+    int max, min;
+    double mid;
+
     for (unsigned i = 0; i != n; ++i) {
         cin >> num;
-        cnt_numbers[num] += 1;
+        numbers.push_back(num);
     }
+    if (numbers[0] > numbers[n-1]) { max = numbers[0]; min = numbers[n-1]; }
+    else { max = numbers[n-1]; min = numbers[0]; }        
+    if (n % 2 == 0) { 
+        mid = double(numbers[n/2 - 1] + numbers[n/2]) / 2; 
+    }
+    else { mid = numbers[n/2]; }
+    
+    if (n % 2 == 0 && (numbers[n/2 - 1] + numbers[n/2]) % 2 == 1)
+        printf("%d %.1lf %d", max, mid, min);
+    else
+        printf("%d %d %d", max, int(mid), min);
 
-    int max_cnt = 0, max_num = 0;
-    for (unsigned i = 10000 - 1; i != -1; --i) {
-        if (cnt_numbers[i] >= max_cnt) {
-            max_cnt = cnt_numbers[i];
-            max_num = i;
-        }
-    }    
-    
-    cout << max_num << endl;        
-    
     return 0;
 }
