@@ -8,45 +8,215 @@
 using namespace std;
 
 int main() {
-    int num_trees, turns;
-    cin >> num_trees;
-    vector<int> apples_trees;
-    vector<bool> is_drop;
-    int apples_tree, decrease_one_turn;
-    for (unsigned i = 0; i != num_trees; ++i) {
-        cin >> turns;
-        cin >> apples_tree;
-        apples_trees.push_back(apples_tree);
-        is_drop.push_back(false);
-        for (unsigned j = 0; j != turns - 1; ++j) { // 第一个数值是苹果初始数量，不是疏果数
-            cin >> decrease_one_turn;
-            if (decrease_one_turn > 0) { // 正数，表示重新确认树上苹果数量
-                if (decrease_one_turn < apples_trees[i]) {// 说明除了疏果之外，还有自然掉落，才会导致数量不相等
-                    is_drop[i] = true;
-                }
-                apples_trees[i] = decrease_one_turn;
-            }
-            else // 负数，表示疏果数量
-                apples_trees[i] += decrease_one_turn; 
+  //  int num1, num2, num3, num4;
+//    char ch1, ch2, ch3;
+    int num[4];
+    char ch[3];
+    int n;
+    cin >> n;
+    int ans;
+    int compute(int num[4], char ch[3]); 
+   // cin >> num1 >> ch1 >> num2 >> ch2 >> num3 >> ch3 >> num4;   
+    //cout << num1 << " " << ch1 << " " << num2 << " " << ch2 << " " << num3 << " " << ch3 << " "
+      //   << num4 << endl;     
+    for (unsigned i = 0; i != n; ++i) {
+        cin >> num[0] >> ch[0] >> num[1] >> ch[1] >> num[2] >> ch[2] >> num[3];  
+       // cout << num[0]<< " " << ch[0] << " " << num[1] << " " << ch[1] << " " << num[2] << " " 
+         //    << ch[2] << " " << num[3] << endl;  
+        
+        ans = compute(num, ch);             
+        /*
+        ans = num[0];
+        for (unsigned j = 0; j != 3; ++j) {
+            if (ch[j] == '+') { ans += num[j + 1]; }
+            else if (ch[j] == '-') { ans -= num[j + 1]; }
+            else { ; }
         }
+        */
+        if (ans == 24)
+            cout << "Yes" << endl;
+        else
+            cout << "No" << endl;        
     }
-    
-    int sum = 0;
-    for (auto n: apples_trees)
-        sum += n;
-        
-    int drop_trees = 0;
-    for (auto b: is_drop)
-        drop_trees += b;
-        
-    int continuous_drop = 0;
-    for (unsigned i = 0; i != num_trees; ++i) {
-        if (is_drop[(i - 1 + num_trees) % num_trees] && is_drop[i] && is_drop[(i + 1) % num_trees])
-            ++continuous_drop;    
-    }
-    
-    cout << sum << " " << drop_trees << " " << continuous_drop << endl;
-        
+
     
     return 0;
 }
+
+int compute(int num[4], char ch[3]) 
+{   
+    int ans;
+    if (ch[0] == '+') {
+        if (ch[1] == '+') {
+            if (ch[2] == '+') {
+                ans = num[0] + num[1] + num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] + num[1] + num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] + num[1] + num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] + num[1] + num[2] / num[3];
+            }
+        } else if (ch[1] == '-') {
+            if (ch[2] == '+') {
+                ans = num[0] + num[1] - num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] + num[1] - num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] + num[1] - num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] + num[1] - num[2] / num[3];
+            }
+        } else if (ch[1] == 'x') {
+            if (ch[2] == '+') {
+                ans = num[0] + num[1] * num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] + num[1] * num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] + num[1] * num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] + num[1] * num[2] / num[3];
+            }
+        } else if (ch[1] == '/') {
+            if (ch[2] == '+') {
+                ans = num[0] + num[1] / num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] + num[1] / num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] + num[1] / num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] + num[1] / num[2] / num[3];
+            }
+        }
+    } else if (ch[0] == '-') {
+        if (ch[1] == '+') {
+            if (ch[2] == '+') {
+                ans = num[0] - num[1] + num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] - num[1] + num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] - num[1] + num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] - num[1] + num[2] / num[3];
+            }
+        } else if (ch[1] == '-') {
+            if (ch[2] == '+') {
+                ans = num[0] - num[1] - num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] - num[1] - num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] - num[1] - num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] - num[1] - num[2] / num[3];
+            }
+        } else if (ch[1] == 'x') {
+            if (ch[2] == '+') {
+                ans = num[0] - num[1] * num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] - num[1] * num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] - num[1] * num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] - num[1] * num[2] / num[3];
+            }
+        } else if (ch[1] == '/') {
+            if (ch[2] == '+') {
+                ans = num[0] - num[1] / num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] - num[1] / num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] - num[1] / num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] - num[1] / num[2] / num[3];
+            }
+        }
+    } else if (ch[0] == 'x') {
+        if (ch[1] == '+') {
+            if (ch[2] == '+') {
+                ans = num[0] * num[1] + num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] * num[1] + num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] * num[1] + num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] * num[1] + num[2] / num[3];
+            }
+        } else if (ch[1] == '-') {
+            if (ch[2] == '+') {
+                ans = num[0] * num[1] - num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] * num[1] - num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] * num[1] - num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] * num[1] - num[2] / num[3];
+            }
+        } else if (ch[1] == 'x') {
+            if (ch[2] == '+') {
+                ans = num[0] * num[1] * num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] * num[1] * num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] * num[1] * num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] * num[1] * num[2] / num[3];
+            }
+        } else if (ch[1] == '/') {
+            if (ch[2] == '+') {
+                ans = num[0] * num[1] / num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] * num[1] / num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] * num[1] / num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] * num[1] / num[2] / num[3];
+            }
+        }
+    } else if (ch[0] == '/') {
+        if (ch[1] == '+') {
+            if (ch[2] == '+') {
+                ans = num[0] / num[1] + num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] / num[1] + num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] / num[1] + num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] / num[1] + num[2] / num[3];
+            }
+        } else if (ch[1] == '-') {
+            if (ch[2] == '+') {
+                ans = num[0] / num[1] - num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] / num[1] - num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] / num[1] - num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] / num[1] - num[2] / num[3];
+            }
+        } else if (ch[1] == 'x') {
+            if (ch[2] == '+') {
+                ans = num[0] / num[1] * num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] / num[1] * num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] / num[1] * num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] / num[1] * num[2] / num[3];
+            }
+        } else if (ch[1] == '/') {
+            if (ch[2] == '+') {
+                ans = num[0] / num[1] / num[2] + num[3];
+            } else if (ch[2] == '-') {
+                ans = num[0] / num[1] / num[2] - num[3];
+            } else if (ch[2] == 'x') {
+                ans = num[0] / num[1] / num[2] * num[3];
+            } else if (ch[2] == '/') {
+                ans = num[0] / num[1] / num[2] / num[3];
+            }
+        }
+    }
+    
+    return ans;
+}
+
+
