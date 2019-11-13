@@ -2,23 +2,26 @@
 #include <cmath>
 using namespace std;
 
-int nums[2001] = {};
+int cnt_numbers[10000] = {};
 
 int main() {
     int n;
     cin >> n;
     int num;
-    int cnt = 0;
     for (unsigned i = 0; i != n; ++i) {
         cin >> num;
-        nums[num + 1000] += 1;
+        cnt_numbers[num] += 1;
     }
-    for (unsigned i = 0; i != 1000; ++i) {
-        if (nums[i] == 1 && nums[2000 - i] == 1)
-            ++cnt;
+
+    int max_cnt = 0, max_num = 0;
+    for (unsigned i = 10000 - 1; i != -1; --i) {
+        if (cnt_numbers[i] >= max_cnt) {
+            max_cnt = cnt_numbers[i];
+            max_num = i;
+        }
     }    
     
-    cout << cnt << endl;
+    cout << max_num << endl;        
     
     return 0;
 }
