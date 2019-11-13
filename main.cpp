@@ -3,15 +3,20 @@
 using namespace std;
 
 int main() {
-    long n;
+    int n;
     cin >> n;
-    int sum = 0;
-    while (n != 0) {
-        sum += n % 10;
-        n /= 10;
+    int num, prev_num;
+    cin >> prev_num;
+    int cnt = 1;
+    for (unsigned i = 1; i != n; ++i) {
+        cin >> num;
+        if (num != prev_num) {
+            ++cnt;
+            prev_num = num;
+        }
     }
     
-    cout << sum << endl;
+    cout << cnt << endl;
     
     return 0;
 }
