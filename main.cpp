@@ -1,32 +1,20 @@
 #include <iostream>
-#include <sstream>
-#include <vector>
+#include <cmath>
 using namespace std;
 
 int main() {
     int n;
     cin >> n;
-    int num, cnt_numbers[1000] = {};
-    for (unsigned i = 0; i != n; ++i) {
-        cin >> num;
-        cnt_numbers[num] += 1;
+    int prev_price, today_price;
+    cin >> prev_price;
+    int diff, max_diff = 0;
+    for (unsigned i = 1; i != n; ++i) {
+        cin >> today_price;
+        diff = abs(today_price - prev_price);
+        if (diff > max_diff) { max_diff = diff; }
+        prev_price = today_price;
     }
-    
-    int cnt = 0;
-    int mid, n_mid;
-    for (unsigned i = 0; i != 1000; ++i) {
-        cnt += cnt_numbers[i];
-        if (cnt >= n / 2 + 1) {
-            mid = i;
-            n_mid = cnt_numbers[i];
-            break;
-        }
-    }
-    
-    if (n % 2 == 1 && n_mid % 2 == 1) { cout << mid << endl; }
-    else if (n % 2 == 1 && n_mid % 2 == 0) { cout << -1 << endl; }
-    else if (n % 2 == 0 && n_mid % 2 == 1) { cout << -1 << endl; }    
-    else if (n % 2 == 0 && n_mid % 2 == 0) { cout << mid << endl; }    
-        
+    cout << max_diff << endl;
+            
     return 0;
 }
