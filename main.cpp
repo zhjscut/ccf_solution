@@ -3,52 +3,44 @@
 #include <vector>
 using namespace std;
 
+struct Child {
+	int id;
+	Child *prev;
+	Child *next;		
+};
+	
+
 int main() {
-    int n, L, time;
-    cin >> n >> L >> time;
-    vector<int> speeds(n, 1);
-    vector<int> positions;
-    int tmp;
-    for (unsigned i = 0; i != n; ++i) {
-        cin >> tmp;
-        positions.push_back(tmp);    
-    }
-    bool is_collide(int, vector<int> &);
-  //  cout << "t=0: ";
-  //  for (auto pos: positions)
-  //      cout << pos << " ";
-  //  cout << endl;      
-    for (int t = 0; t != time; ++t) {
-        for (unsigned i = 0; i != n; ++i)
-            positions[i] += speeds[i];
-        for (unsigned i = 0; i != n; ++i) {
-            if (positions[i] == 0) { speeds[i] = 1; }
-            else if (positions[i] == L) { speeds[i] = -1; }
-            else if ( is_collide(positions[i], positions) ) { speeds[i] = -speeds[i]; } 
-        }
-    //    cout << "t=" << t+1 << ": ";
-    //    for (auto pos: positions)
-    //        cout << pos << " ";
-    //    cout << endl;        
-    }
-    
-    for (auto pos: positions)
-        cout << pos << " ";
-    cout << endl;
-    
+	int n, k;
+	cin >> n >> k;
+	vector<Child> vchild;
+	for (int i = 0; i != n; ++i) {
+		Child child = Child{i + 1};
+		vchild.push_back(child);
+	}
+	for (int i = 0; i != n; ++i) {
+		vchild[i].next = &vchild[(i + 1) % n]; 	
+		vchild[i].prev = &vchild[(i - 1 + n) % n];
+	}
+	//for (auto c: vchild)
+	  //  cout << "id: " << c.id << "prev: " << c.prev->id << "next: " << c.next->id << endl;
+	int cnt = 1, nn = n;
+	Child *pchild = &vchild[0], *tmp_pchild = 0;
+	
+	while (nn != 1) {
+		//cout << nn << endl;
+		if (cnt % k == 0 || cnt % 10 == k) {
+		   // cout << pchild->id << " out." << endl;
+			pchild->prev->next = pchild->next;
+			pchild->next->prev = pchild->prev;
+			--nn;
+		}
+		pchild = pchild->next;
+		++cnt;
+	}
+	
+	cout << pchild->id << endl;
+
     return 0;
 }
 
-
-bool is_collide(int pos, vector<int> &vpos)
-{
-    int cnt = 0;
-    for (auto p: vpos)    
-        if (pos == p) { // cnt必定不小于1，因为vpos里面有自己
-            ++cnt;
-            if (cnt == 2)
-                return true;
-        }
-            
-    return false;
-}
