@@ -4,52 +4,53 @@
 using namespace std;
 
 int main() {
-    int r, y, g;
-    int light[3];
-    cin >> r >> y >> g;
+    vector<int> mina, maxa, minb, maxb;
     int n;
     cin >> n;
-    //cin >> light[0] >> light[2] >> light[1] >> n;
-    int type, time;
-    long long total_time = 0;
-    int interval[3] = {r, y, g};
-    void update(int [3], long long, int &, int &);    
-    int sum = light[0] + light[1] + light[2];
-    
-    for (int i = 0; i != n; ++i) {
-        cin >> type >> time;
-      //  cout << "before: " << i << " " << type << " " << time << " " << total_time << endl;        
-        update(interval, total_time, type, time);
-      //  cout << "after: " << i << " " << type << " " << time << endl;
-        if (type == 0) { total_time += time; }
-        if (type == 1) { total_time += time; }
-        if (type == 2) { total_time += time + r; } 
-        if (type == 3) { ; } 
+    int min, max;
+    for (unsigned i = 0; i != n; ++i) {
+        cin >> min >> max;
+        mina.push_back(min); maxa.push_back(max);
     }
+    for (unsigned i = 0; i != n; ++i) {
+        cin >> min >> max;
+        minb.push_back(min); maxb.push_back(max);
+    }   
+    unsigned ix1 = 0, ix2 = 0;
+    int total_time = 0;
+    int compute_time(int, int, int, int);    
+    while (1) { 
+        if (mina[ix1] < maxb[ix2] && minb[ix2] < maxa[ix1]) {
+          //  cout << mina[ix1] << " " << maxa[ix1] << " " << minb[ix2] << " " << maxb[ix2] << " ";
+          //  cout << compute_time(mina[ix1], maxa[ix1], minb[ix2], maxb[ix2]) << endl;
+            total_time += compute_time(mina[ix1], maxa[ix1], minb[ix2], maxb[ix2]);
+            if ( ix1 != (n - 1) && mina[ix1 + 1] < maxb[ix2] && minb[ix2] < maxa[ix1 + 1] ) { ++ix1; }
+            else if ( ix2 != (n - 1) && mina[ix1] < maxb[ix2 + 1] && minb[ix2 + 1] < maxa[ix1]) { ++ix2; }
+            else if ( ix1 != (n - 1) ) { ++ix1; }
+            else if ( ix2 != (n - 1) ) { ++ix2; }
+            else { break; }
+        }
+
+        else if (minb[ix2] >= maxa[ix1]) {
+            if ( ix1 == (n - 1) ) { break; }
+            else { ++ix1; }
+        } 
+        else if (mina[ix1] >= maxb[ix2]) {
+            if ( ix2 == (n - 1) ) { break; }
+            else { ++ix2; }
+        }
+    } 
     
-    cout << total_time;    
+    cout << total_time << endl;
+       
     return 0;
 }
 
-void update(int interval[3], long long total_time, int &type, int &time)
+int compute_time(int min_a, int max_a, int min_b, int max_b)
 {
-    if (type == 0)
-        return;
-   // 加上这个会导致很多错误，只剩30分 
-  //  int sum = interval[0] + interval[1] + interval[2];
-  //  while (total_time > sum)
-  //      total_time -= sum;
-    
-    while (total_time > time) {
-      //  cout << total_time << endl;
-        total_time -= time; 
-        type = (type - 2 + 3) % 3 + 1; // 为了实现3 -> 2, 2 -> 1, 1 -> 3的转换
-        time = interval[type - 1];       
-    }
-    
-    time = time - total_time;
-   
-    return;
+    if (min_a <= min_b && min_b < max_a && max_a <= max_b) { return (max_a - min_b); }
+    else if (min_a <= min_b && max_b <= max_a) { return (max_b - min_b); }
+    else if (min_b <= min_a && min_a < max_b && max_b <= max_a) { return (max_b - min_a); }
+    else if (min_b <= min_a && max_a <= max_b) { return (max_a - min_a); }
 }
-
 
