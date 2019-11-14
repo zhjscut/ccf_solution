@@ -4,53 +4,51 @@
 using namespace std;
 
 int main() {
-    vector<int> mina, maxa, minb, maxb;
-    int n;
-    cin >> n;
-    int min, max;
+    int n, L, time;
+    cin >> n >> L >> time;
+    vector<int> speeds(n, 1);
+    vector<int> positions;
+    int tmp;
     for (unsigned i = 0; i != n; ++i) {
-        cin >> min >> max;
-        mina.push_back(min); maxa.push_back(max);
+        cin >> tmp;
+        positions.push_back(tmp);    
     }
-    for (unsigned i = 0; i != n; ++i) {
-        cin >> min >> max;
-        minb.push_back(min); maxb.push_back(max);
-    }   
-    unsigned ix1 = 0, ix2 = 0;
-    int total_time = 0;
-    int compute_time(int, int, int, int);    
-    while (1) { 
-        if (mina[ix1] < maxb[ix2] && minb[ix2] < maxa[ix1]) {
-          //  cout << mina[ix1] << " " << maxa[ix1] << " " << minb[ix2] << " " << maxb[ix2] << " ";
-          //  cout << compute_time(mina[ix1], maxa[ix1], minb[ix2], maxb[ix2]) << endl;
-            total_time += compute_time(mina[ix1], maxa[ix1], minb[ix2], maxb[ix2]);
-            if ( ix1 != (n - 1) && mina[ix1 + 1] < maxb[ix2] && minb[ix2] < maxa[ix1 + 1] ) { ++ix1; }
-            else if ( ix2 != (n - 1) && mina[ix1] < maxb[ix2 + 1] && minb[ix2 + 1] < maxa[ix1]) { ++ix2; }
-            else if ( ix1 != (n - 1) ) { ++ix1; }
-            else if ( ix2 != (n - 1) ) { ++ix2; }
-            else { break; }
+    bool is_collide(int, vector<int> &);
+  //  cout << "t=0: ";
+  //  for (auto pos: positions)
+  //      cout << pos << " ";
+  //  cout << endl;      
+    for (int t = 0; t != time; ++t) {
+        for (unsigned i = 0; i != n; ++i)
+            positions[i] += speeds[i];
+        for (unsigned i = 0; i != n; ++i) {
+            if (positions[i] == 0) { speeds[i] = 1; }
+            else if (positions[i] == L) { speeds[i] = -1; }
+            else if ( is_collide(positions[i], positions) ) { speeds[i] = -speeds[i]; } 
         }
-
-        else if (minb[ix2] >= maxa[ix1]) {
-            if ( ix1 == (n - 1) ) { break; }
-            else { ++ix1; }
-        } 
-        else if (mina[ix1] >= maxb[ix2]) {
-            if ( ix2 == (n - 1) ) { break; }
-            else { ++ix2; }
-        }
-    } 
+    //    cout << "t=" << t+1 << ": ";
+    //    for (auto pos: positions)
+    //        cout << pos << " ";
+    //    cout << endl;        
+    }
     
-    cout << total_time << endl;
-       
+    for (auto pos: positions)
+        cout << pos << " ";
+    cout << endl;
+    
     return 0;
 }
 
-int compute_time(int min_a, int max_a, int min_b, int max_b)
-{
-    if (min_a <= min_b && min_b < max_a && max_a <= max_b) { return (max_a - min_b); }
-    else if (min_a <= min_b && max_b <= max_a) { return (max_b - min_b); }
-    else if (min_b <= min_a && min_a < max_b && max_b <= max_a) { return (max_b - min_a); }
-    else if (min_b <= min_a && max_a <= max_b) { return (max_a - min_a); }
-}
 
+bool is_collide(int pos, vector<int> &vpos)
+{
+    int cnt = 0;
+    for (auto p: vpos)    
+        if (pos == p) { // cnt必定不小于1，因为vpos里面有自己
+            ++cnt;
+            if (cnt == 2)
+                return true;
+        }
+            
+    return false;
+}
