@@ -4,17 +4,44 @@
 using namespace std;
 
 int main() {
-	double num, ans;
-	cin >> num;
-	if (num <= 3500) { ans = num; }
-	else if (num <= 4955 ) { ans = (num - 3500) / 0.97 + 3500; }
-	else if (num <= 7655 ) { ans = (num - 4955) / 0.9 + 5000; }
-	else if (num <= 11255 ) { ans = (num - 7655) / 0.8 + 8000; }
-	else if (num <= 30755 ) { ans = (num - 11255) / 0.75 + 12500; }
-	else if (num <= 44755 ) { ans = (num - 30755) / 0.7 + 38500; }
-	else if (num <= 61005 ) { ans = (num - 44755) / 0.65 + 58500; }
-	else { ans = (num - 61005) / 0.55 + 83500; }
+	int n, p;
+	cin >> n;
+	int seats[100] = {};
+	bool assigned;
+	for (unsigned i = 0; i != n; ++i) {
+		cin >> p;
+		assigned = false;
+		for (unsigned row = 0; row != 100 / 5; ++row) {
+			for (unsigned col = 0; col != 5; ++col) {
+				if (seats[row * 5 + col] == 0 && col + p <= 5) {
+					for (unsigned j = 0; j != p; ++j) {
+						seats[row*5 + col + j] = 1;
+						cout << row*5 + col + j + 1 << " ";
+					}
+					cout << endl;	
+					assigned = true;
+					break;			
+				}		
+			}
+			//	seats[0] = 100;
+			if (assigned) { break; }
+		}
+		if (assigned) { continue; }
+		else {
+			for (unsigned j = 0; j != 100; ++j) {
+				if (seats[j] == 0) {
+					seats[j] == 1;
+					cout << j + 1 << " ";
+					--p;
+					if (p==0) { break; }					
+				}
+			}
+			cout << endl;
+		}
+	}
+//	for (auto c: seats)
+//		cout << c << " ";
+//	cout << endl; 
 	
-	cout << int(ans) << endl;
-	return 0; 
+	return 0;	
 } 
